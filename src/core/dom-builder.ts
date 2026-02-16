@@ -14,18 +14,26 @@
 
 import { DOMElement, DOMTreeState } from '../types';
 
-interface DOMBuilderOptions {
+export interface DOMBuilderOptions {
   url?: string;
   maxElements?: number;
   selector?: string;
 }
 
-interface CoordinateOptions {
+export interface CoordinateOptions {
   usePageCoordinates?: boolean;
 }
 
+/**
+ * We export the class for Node.js usage (testing)
+ * For browser usage, we will inject the code via string manipulation or bundler
+ */
 export class DOMBuilder {
-  private static readonly INTERACTIVE_TAGS = new Set([
+  // Static properties need to be defined in a way that survives serialization if possible
+  // or re-defined in the script.
+  // For simplicity, we'll keep them here but also might need to ensure they work in the browser.
+
+  private readonly INTERACTIVE_TAGS = new Set([
     'BUTTON',
     'A',
     'INPUT',
@@ -34,7 +42,7 @@ export class DOMBuilder {
     'LABEL',
   ]);
 
-  private static readonly INTERACTIVE_ROLES = new Set([
+  private readonly INTERACTIVE_ROLES = new Set([
     'button',
     'link',
     'tab',
@@ -53,7 +61,7 @@ export class DOMBuilder {
     if (!element) return false;
 
     // Stage 1: Form tags (100% confidence)
-    if (DOMBuilder.INTERACTIVE_TAGS.has(element.tagName)) {
+    if (this.INTERACTIVE_TAGS.has(element.tagName)) {
       // But not if disabled
       if ((element as any).disabled === true) {
         return false;
@@ -74,7 +82,7 @@ export class DOMBuilder {
 
     // Stage 3: ARIA role detection (~60% confidence)
     const role = element.getAttribute('role');
-    if (role && DOMBuilder.INTERACTIVE_ROLES.has(role.toLowerCase())) {
+    if (role && this.INTERACTIVE_ROLES.has(role.toLowerCase())) {
       return true;
     }
 
@@ -158,7 +166,13 @@ export class DOMBuilder {
 
     // Fallback for JSDOM: if element is in document and passes other checks, it's visible
     if (doc?.contains?.(element)) {
-      return true;
+      // If we are in a real browser, and elementFromPoint failed, it might really be hidden.
+      // But for JSDOM we assume visible if in layout.
+      // We can detect environment.
+      if (!doc.defaultView?.matchMedia) { // Rough check for JSDOM
+          return true;
+      }
+      return false;
     }
 
     return false;
@@ -273,6 +287,10 @@ export class DOMBuilder {
 
       const isInteractive = this.isInteractive(htmlElement);
       const isVisible = this.isVisible(htmlElement);
+      // Skip invisible elements to save tokens? Or keep them?
+      // For now, keep them but maybe flag them.
+      // Optimization: if not visible, maybe skip interaction check?
+
       const xpath = this.generateXPath(htmlElement);
       const viewportCoords = this.getCoordinates(htmlElement, { usePageCoordinates: false });
       const pageCoords = this.getCoordinates(htmlElement, { usePageCoordinates: true });
@@ -311,4 +329,3 @@ export class DOMBuilder {
     };
   }
 }
-

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Page</title>
+</head>
+<body>
+    <h1>Welcome</h1>
+    <button id="btn-click">Click Me</button>
+    <input type="text" id="input-text" placeholder="Type here">
+    <select id="select-opt">
+        <option value="opt1">Option 1</option>
+        <option value="opt2">Option 2</option>
+    </select>
+    <div id="div-btn" style="cursor: pointer; padding: 10px; background: red;">Div Button</div>
+    <script>
+        document.getElementById('btn-click').onclick = () => {
+            document.body.setAttribute('data-clicked', 'true');
+            console.log('Button Clicked');
+        };
+        document.getElementById('div-btn').onclick = () => {
+             document.body.setAttribute('data-div-clicked', 'true');
+             console.log('Div Clicked');
+        };
+    </script>
+</body>
+</html>

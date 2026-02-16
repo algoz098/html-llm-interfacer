@@ -1,58 +1,81 @@
 /**
  * ClickAction - Execute click actions on elements
  * Implements multi-fallback strategy:
- * 1. CSS/XPath selector
- * 2. XPath variant
- * 3. Coordinates (last resort)
+ * 1. XPath selector (most reliable if tree is fresh)
+ * 2. Coordinates (fast, good fallback if element moved slightly or ID changed, but requires element visibility)
+ * 3. Selector (if available in params)
  */
 
-import { Action, ActionResult } from '../types';
+import { Action, ActionResult, SessionState } from '../types';
+import { BrowserDriver } from '../interfaces/browser-driver';
 
 export class ClickAction {
   /**
-   * Execute click action (TBD - implementation)
+   * Execute click action with fallback strategy
    */
-  async execute(_action: Action): Promise<ActionResult> {
-    return {
-      success: false,
-      message: 'ClickAction.execute() - TBD',
-      error: 'Not implemented yet',
-      confidence: 0,
-    };
-  }
+  async execute(driver: BrowserDriver, action: Action, session: SessionState): Promise<ActionResult> {
+    const errors: string[] = [];
 
-  /**
-   * Execute click by XPath (TBD - implementation)
-   */
-  async executeByXPath(_xpath: string): Promise<ActionResult> {
-    return {
-      success: false,
-      message: 'ClickAction.executeByXPath() - TBD',
-      error: 'Not implemented yet',
-      confidence: 0,
-    };
-  }
+    // Strategy 1: XPath
+    // Priority: Explicit XPath in action > Element's XPath from session
+    let xpath = action.xpath;
+    let elementCoords: { x: number, y: number } | undefined;
 
-  /**
-   * Execute click by coordinates (TBD - implementation)
-   */
-  async executeByCoordinates(_coords: { x: number; y: number }): Promise<ActionResult> {
-    return {
-      success: false,
-      message: 'ClickAction.executeByCoordinates() - TBD',
-      error: 'Not implemented yet',
-      confidence: 0,
-    };
-  }
+    // Retrieve element info if index is present, regardless of xpath presence
+    // This allows fallback to coordinates even if xpath was provided but failed
+    if (action.elementIndex !== undefined && session.domTree.elements[action.elementIndex]) {
+      const element = session.domTree.elements[action.elementIndex];
+      if (!xpath) {
+        xpath = element.xpath;
+      }
+      elementCoords = { x: element.viewportX, y: element.viewportY };
+    }
 
-  /**
-   * Execute with fallback chain (TBD - implementation)
-   */
-  async executeWithFallback(_action: Action): Promise<ActionResult> {
+    if (xpath) {
+      try {
+        await driver.clickXPath(xpath);
+        return {
+          success: true,
+          message: 'Clicked element via XPath',
+          confidence: 1.0,
+        };
+      } catch (error: any) {
+        errors.push(`XPath failed: ${error.message}`);
+      }
+    }
+
+    // Strategy 2: Coordinates (if available)
+    if (elementCoords) {
+      try {
+        await driver.clickCoordinates(elementCoords.x, elementCoords.y);
+        return {
+          success: true,
+          message: 'Clicked element via Coordinates (Fallback)',
+          confidence: 0.8, // Lower confidence
+        };
+      } catch (error: any) {
+        errors.push(`Coordinates failed: ${error.message}`);
+      }
+    }
+
+    // Strategy 3: CSS Selector (if provided in params)
+    if (action.params?.selector && typeof action.params.selector === 'string') {
+        try {
+            await driver.click(action.params.selector);
+            return {
+                success: true,
+                message: 'Clicked element via CSS Selector (Fallback)',
+                confidence: 0.9
+            };
+        } catch (error: any) {
+            errors.push(`Selector failed: ${error.message}`);
+        }
+    }
+
     return {
       success: false,
-      message: 'ClickAction.executeWithFallback() - TBD',
-      error: 'Not implemented yet',
+      message: 'All click strategies failed',
+      error: errors.join('; '),
       confidence: 0,
     };
   }
