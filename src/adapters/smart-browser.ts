@@ -9,6 +9,8 @@ import { DOMBuilder } from '../core/dom-builder';
 import { ClickAction } from '../actions/click';
 import { TypeAction } from '../actions/type';
 import { SelectAction } from '../actions/select';
+import { DOMSerializer } from '../translation/dom-serializer';
+import { ActionParser } from '../translation/action-parser';
 
 /**
  * SmartBrowser: Multi-layer web automation engine
@@ -24,6 +26,8 @@ export class SmartBrowser {
   private driver: BrowserDriver;
   private config: SmartBrowserConfig;
   private session: SessionState;
+  private serializer: DOMSerializer;
+  private actionParser: ActionParser;
 
   constructor(driver: BrowserDriver, config: SmartBrowserConfig = {}) {
     this.driver = driver;
@@ -38,6 +42,8 @@ export class SmartBrowser {
       },
       history: [],
     };
+    this.serializer = new DOMSerializer({ includeNonInteractive: false });
+    this.actionParser = new ActionParser();
   }
 
   /**
@@ -194,6 +200,32 @@ export class SmartBrowser {
     await this.driver.navigate(url);
     // Update session URL immediately
     this.session.domTree.url = url;
+  }
+
+  /**
+   * Get the current state as a Markdown string for LLM consumption.
+   * This triggers a fresh DOM build.
+   */
+  async getLLMContext(): Promise<string> {
+    const domTree = await this.buildDOMTree();
+    return this.serializer.serialize(domTree.elements);
+  }
+
+  /**
+   * Execute an action derived from an LLM response.
+   * Parses the JSON/String and executes the action.
+   */
+  async executeLLMAction(llmResponse: string | object): Promise<ActionResult> {
+    try {
+      const action = this.actionParser.parse(llmResponse);
+      return await this.executeAction(action);
+    } catch (error: any) {
+      return {
+        success: false,
+        message: `Failed to execute LLM action: ${error.message}`,
+        error: error.message,
+      };
+    }
   }
 
   /**
