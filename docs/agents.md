@@ -14,14 +14,14 @@ Análise completa de 13 frameworks de web automation:
 
 | Recurso | Tipo | Use Quando |
 |---------|------|-----------|
-| [SYNTHESIS.md](./DOCS/research/SYNTHESIS.md) | Análise Cruzada | ← **COMECE AQUI** |
-| [nanobrowser.md](./DOCS/research/nanobrowser.md) | Detecção de Elementos | Precisa encontrar o que é clicável |
-| [skyvern.md](./DOCS/research/skyvern.md) | Taxonomia de Ações | Precisa tipificar/estruturar ações |
-| [browserable.md](./DOCS/research/browserable.md) | Estratégias Multi-Fallback | Páginas grandes ou selectors frágeis |
-| [browsernode.md](./DOCS/research/browsernode.md) | Gerenciamento de Sessão | Multi-turn interactions com estado |
-| [readability.md](./DOCS/research/readability.md) | Extração de Conteúdo | Remover boilerplate, extrair artigos |
-| [browserbase-mcp.md](./DOCS/research/browserbase-mcp.md) | Deployment Cloud | Precisa escalar sem máquinas locais |
-| [README.md](./DOCS/research/README.md) | Índice Completo | Referência rápida |
+| [SYNTHESIS.md](./research/synthesis.md) | Análise Cruzada | ← **COMECE AQUI** |
+| [nanobrowser.md](./research/nanobrowser.md) | Detecção de Elementos | Precisa encontrar o que é clicável |
+| [skyvern.md](./research/skyvern.md) | Taxonomia de Ações | Precisa tipificar/estruturar ações |
+| [browserable.md](./research/browserable.md) | Estratégias Multi-Fallback | Páginas grandes ou selectors frágeis |
+| [browsernode.md](./research/browsernode.md) | Gerenciamento de Sessão | Multi-turn interactions com estado |
+| [readability.md](./research/readability.md) | Extração de Conteúdo | Remover boilerplate, extrair artigos |
+| [browserbase-mcp.md](./research/browserbase-mcp.md) | Deployment Cloud | Precisa escalar sem máquinas locais |
+| [README.md](./research/readme.md) | Índice Completo | Referência rápida |
 
 ---
 
@@ -152,8 +152,8 @@ class SmartBrowser {
 ```
 
 📚 **Referências:**
-- [nanobrowser.md](./DOCS/research/nanobrowser.md) - Interactivity heuristics
-- [SYNTHESIS.md - Phase 1](./DOCS/research/SYNTHESIS.md#sprint-1-foundation)
+- [nanobrowser.md](./research/nanobrowser.md) - Interactivity heuristics
+- [SYNTHESIS.md - Phase 1](./research/synthesis.md#sprint-1-foundation)
 
 ---
 
@@ -197,8 +197,8 @@ async waitForStability(element, timeout=500) {
 ```
 
 📚 **Referências:**
-- [browsernode.md](./DOCS/research/browsernode.md) - Session + frames
-- [SYNTHESIS.md - Phase 2](./DOCS/research/SYNTHESIS.md#sprint-2-robustness)
+- [browsernode.md](./research/browsernode.md) - Session + frames
+- [SYNTHESIS.md - Phase 2](./research/synthesis.md#sprint-2-robustness)
 
 ---
 
@@ -235,8 +235,8 @@ if (selectorFails) {
 ```
 
 📚 **Referências:**
-- [skyvern.md](./DOCS/research/skyvern.md) - Action taxonomy
-- [SYNTHESIS.md - Phase 3](./DOCS/research/SYNTHESIS.md#sprint-3-intelligence)
+- [skyvern.md](./research/skyvern.md) - Action taxonomy
+- [SYNTHESIS.md - Phase 3](./research/synthesis.md#sprint-3-intelligence)
 
 ---
 
@@ -268,9 +268,9 @@ const article = reader.parse();  // Clean HTML + text
 ```
 
 📚 **Referências:**
-- [browserable.md](./DOCS/research/browserable.md) - Chunking
-- [readability.md](./DOCS/research/readability.md) - Content extraction
-- [SYNTHESIS.md - Phase 4](./DOCS/research/SYNTHESIS.md#sprint-4-scale)
+- [browserable.md](./research/browserable.md) - Chunking
+- [readability.md](./research/readability.md) - Content extraction
+- [SYNTHESIS.md - Phase 4](./research/synthesis.md#sprint-4-scale)
 
 ---
 
@@ -309,8 +309,8 @@ class SessionManager {
 ```
 
 📚 **Referências:**
-- [browserbase-mcp.md](./DOCS/research/browserbase-mcp.md) - Session pooling
-- [SYNTHESIS.md - Phase 5](./DOCS/research/SYNTHESIS.md#sprint-5-production)
+- [browserbase-mcp.md](./research/browserbase-mcp.md) - Session pooling
+- [SYNTHESIS.md - Phase 5](./research/synthesis.md#sprint-5-production)
 
 ---
 
@@ -375,13 +375,13 @@ Grandes pags (>5000):
 ### ❌ "Elemento não encontrado"
 **Causa:** Selector frágil ou elemento em iframe
 **Solução:** 
-1. Verificar [browsernode.md - Frame navigation](./DOCS/research/browsernode.md#6-frame-navigation-iframes)
+1. Verificar [browsernode.md - Frame navigation](./research/browsernode.md#6-frame-navigation-iframes)
 2. Usar vision fallback (browserable)
 
 ### ❌ "DOM muito grande (50k+ tokens)"
 **Causa:** Página não foi processada com Readability
 **Solução:**
-1. Aplicar [readability.md](./DOCS/research/readability.md)
+1. Aplicar [readability.md](./research/readability.md)
 2. Ou usar chunking (browserable)
 
 ### ❌ "Ações lentas (>5s por clique)"
@@ -393,24 +393,24 @@ Grandes pags (>5000):
 ### ❌ "Múltiplas sessões ficam abertas"
 **Causa:** Sem cleanup de idle
 **Solução:**
-1. Implementar [browserbase-mcp.md - Session cleanup](./DOCS/research/browserbase-mcp.md#3-screenshot-handling-cdp-integration)
+1. Implementar [browserbase-mcp.md - Session cleanup](./research/browserbase-mcp.md#3-screenshot-handling-cdp-integration)
 
 ---
 
 ## 📞 Referências Rápidas
 
 ### **Padrões Implementados**
-- ✅ Element detection: [nanobrowser heuristics](./DOCS/research/nanobrowser.md#2-interactive-element-heuristics-multi-stage)
-- ✅ Action fallback: [browserable strategies](./DOCS/research/browserable.md#1-multi-helper-action-execution-pattern)
-- ✅ Session management: [browsernode](./DOCS/research/browsernode.md#4-browsersession-management)
-- ✅ Content extraction: [readability algorithm](./DOCS/research/readability.md#2-content-scoring-algorithm)
+- ✅ Element detection: [nanobrowser heuristics](./research/nanobrowser.md#2-interactive-element-heuristics-multi-stage)
+- ✅ Action fallback: [browserable strategies](./research/browserable.md#1-multi-helper-action-execution-pattern)
+- ✅ Session management: [browsernode](./research/browsernode.md#4-browsersession-management)
+- ✅ Content extraction: [readability algorithm](./research/readability.md#2-content-scoring-algorithm)
 
 ### **Documentos de Pesquisa**
-- [SYNTHESIS.md](./DOCS/research/SYNTHESIS.md) - Análise cruzada + decisões arquiteturais
-- [README Research](./DOCS/research/README.md) - Índice de 13 frameworks
+- [SYNTHESIS.md](./research/synthesis.md) - Análise cruzada + decisões arquiteturais
+- [README Research](./research/readme.md) - Índice de 13 frameworks
 
 ### **Passos Recomendados**
-1. Ler [SYNTHESIS.md](./DOCS/research/SYNTHESIS.md) completamente
+1. Ler [SYNTHESIS.md](./research/synthesis.md) completamente
 2. Começar Fase 1 com padrões de nanobrowser
 3. Testar em 3 sites de tamanho diferente
 4. Iterar para Fase 2-5 baseado em necessidade
@@ -419,7 +419,7 @@ Grandes pags (>5000):
 
 ## ✅ Checklist: Pronto para Começar?
 
-- [ ] Li [SYNTHESIS.md](./DOCS/research/SYNTHESIS.md)
+- [ ] Li [SYNTHESIS.md](./research/synthesis.md)
 - [ ] Escolhi arquitetura (Fase 1-5)
 - [ ] Identifiquei tamanho de páginas alvo
 - [ ] Tenho benchmarks de teste

@@ -54,7 +54,7 @@ Baseada em pesquisa de 13 frameworks:
 4. **Fase 4 (Scale):** DOM chunking + readability extraction
 5. **Fase 5 (Production):** Session pooling + error recovery
 
-📖 Ver [../agents.md](../agents.md) para guia detalhado de implementação.
+📖 Ver [../agents.md](./agents.md) para guia detalhado de implementação.
 
 ## Padrões de Cada Camada
 
@@ -92,7 +92,7 @@ raw_dom (50k+ tokens)
 ```
 
 ## Referências de Pesquisa
-- [SYNTHESIS.md](./research/SYNTHESIS.md) - Decision matrices
+- [SYNTHESIS.md](./research/synthesis.md) - Decision matrices
 - [nanobrowser.md](./research/nanobrowser.md) - Interactivity heuristics (88% accuracy)
 - [skyvern.md](./research/skyvern.md) - Action taxonomy
 - [browserable.md](./research/browserable.md) - Multi-strategy + chunking
