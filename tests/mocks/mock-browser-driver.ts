@@ -138,4 +138,8 @@ export class MockBrowserDriver implements BrowserDriver {
   async screenshot(): Promise<Buffer> {
     return Buffer.from('');
   }
+
+  async getFrameOffsets(): Promise<{ frameIndex: number, x: number, y: number }[]> {
+    return [{ frameIndex: 0, x: 0, y: 0 }];
+  }
 }
