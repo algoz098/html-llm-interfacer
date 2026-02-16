@@ -9,6 +9,8 @@ import { DOMBuilder } from '../core/dom-builder';
 import { ClickAction } from '../actions/click';
 import { TypeAction } from '../actions/type';
 import { SelectAction } from '../actions/select';
+import { WaitAction } from '../actions/wait';
+import { ScrollAction } from '../actions/scroll';
 import { DOMSerializer } from '../translation/dom-serializer';
 import { ActionParser } from '../translation/action-parser';
 
@@ -171,6 +173,12 @@ export class SmartBrowser {
 
         case ActionType.Select:
              return await new SelectAction().execute(this.driver, action, this.session);
+
+        case ActionType.Wait:
+             return await new WaitAction().execute(this.driver, action, this.session);
+
+        case ActionType.Scroll:
+             return await new ScrollAction().execute(this.driver, action, this.session);
       }
 
       // 3. Update session history
