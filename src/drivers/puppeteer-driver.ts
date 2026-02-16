@@ -13,13 +13,20 @@ export class PuppeteerDriver implements BrowserDriver {
       viewportWidth: config.viewportWidth ?? 1280,
       viewportHeight: config.viewportHeight ?? 720,
       timeout: config.timeout ?? 30000,
+      args: config.args,
     };
   }
 
   async initialize(): Promise<void> {
+    const launchArgs = [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      ...(this.config.args || [])
+    ];
+
     this.browser = await puppeteer.launch({
       headless: this.config.headless ? 'new' : false, // 'new' is recommended for newer puppeteer
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      args: launchArgs,
     });
 
     this.page = await this.browser.newPage();
@@ -216,5 +223,48 @@ export class PuppeteerDriver implements BrowserDriver {
 
     // Timeout reached, log but proceed
     // console.warn(`Timeout waiting for stability on ${xpath}`);
+  }
+
+  async getFrameOffsets(): Promise<{ frameIndex: number; x: number; y: number }[]> {
+    if (!this.page) throw new Error('Driver not initialized');
+
+    const frames = this.page.frames();
+    const results: { frameIndex: number; x: number; y: number }[] = [];
+
+    // Helper to get absolute offset of a frame
+    const getAbsoluteOffset = async (frame: Frame): Promise<{ x: number; y: number }> => {
+      const parent = frame.parentFrame();
+      if (!parent) {
+        return { x: 0, y: 0 };
+      }
+
+      const parentOffset = await getAbsoluteOffset(parent);
+      try {
+        // Cast to any because frameElement might be missing in some type definitions
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+        const frameElement = await (frame as any).frameElement() as ElementHandle<Element> | null;
+        if (frameElement) {
+          const box = await frameElement.boundingBox();
+          if (box) {
+            return {
+              x: parentOffset.x + box.x,
+              y: parentOffset.y + box.y
+            };
+          }
+        }
+      } catch (e) {
+        // Ignore errors (e.g. detached frame)
+      }
+      return parentOffset; // Fallback to parent position if box not found
+    };
+
+    // Calculate for all frames
+    // We can optimize by caching parent offsets, but for now simple recursion is fine (depth is usually small)
+    for (let i = 0; i < frames.length; i++) {
+      const offset = await getAbsoluteOffset(frames[i]);
+      results.push({ frameIndex: i, x: offset.x, y: offset.y });
+    }
+
+    return results;
   }
 }

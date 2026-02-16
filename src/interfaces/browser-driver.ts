@@ -86,4 +86,10 @@ export interface BrowserDriver {
    * @param frameIndex Index of the frame
    */
   waitForStability(xpath: string, timeout?: number, frameIndex?: number): Promise<void>;
+
+  /**
+   * Get the bounding box of each frame relative to the viewport
+   * @returns Array of objects with x, y coordinates for each frame index
+   */
+  getFrameOffsets(): Promise<{ frameIndex: number, x: number, y: number }[]>;
 }

@@ -87,4 +87,5 @@ export interface SmartBrowserConfig {
   timeout?: number;
   viewportWidth?: number;
   viewportHeight?: number;
+  args?: string[];
 }

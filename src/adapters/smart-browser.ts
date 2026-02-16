@@ -3,7 +3,7 @@
  * Coordina detecção de elementos, execução de ações e gerenciamento de sessão
  */
 
-import { SmartBrowserConfig, SessionState, Action, ActionResult, DOMTreeState, ActionType } from '../types';
+import { SmartBrowserConfig, SessionState, Action, ActionResult, DOMTreeState, ActionType, DOMElement } from '../types';
 import { BrowserDriver } from '../interfaces/browser-driver';
 import { DOMBuilder } from '../core/dom-builder';
 import { ClickAction } from '../actions/click';
@@ -70,7 +70,10 @@ export class SmartBrowser {
 
     try {
       // Execute in all frames
-      const results = await this.driver.executeInAllFrames<DOMTreeState>(domBuilderScript);
+      const [results, frameOffsets] = await Promise.all([
+        this.driver.executeInAllFrames<DOMTreeState>(domBuilderScript),
+        this.driver.getFrameOffsets()
+      ]);
 
       // Merge results
       // Find main frame (usually index 0, or the one with matching URL if we tracked it, but index 0 is safe bet for now)
@@ -88,19 +91,31 @@ export class SmartBrowser {
         }
       }
 
-      const finalElements: any[] = [];
+      const finalElements: DOMElement[] = [];
       let globalIndex = 0;
 
       // Sort results by frameIndex to be deterministic
       results.sort((a, b) => a.frameIndex - b.frameIndex);
 
+      // Create offset map for quick lookup
+      const offsetMap = new Map<number, { x: number; y: number }>();
+      frameOffsets.forEach((offset) => {
+        offsetMap.set(offset.frameIndex, { x: offset.x, y: offset.y });
+      });
+
       for (const res of results) {
         const frameElements = res.result.elements;
         const frameId = res.frameIndex;
+        const offset = offsetMap.get(frameId) || { x: 0, y: 0 };
 
         frameElements.forEach((el) => {
           // Update frame index
           el.frameIndex = frameId;
+
+          // Adjust coordinates to be relative to main viewport
+          el.viewportX += offset.x;
+          el.viewportY += offset.y;
+
           // Re-index globally
           el.index = globalIndex++;
           finalElements.push(el);

@@ -12,28 +12,28 @@ Make the automation engine resilient to dynamic content changes (animations, lay
 **Solution:** Wait for element bounding box to stabilize before interacting.
 
 **Implementation:**
-- [ ] Add `waitForStability(xpath: string, timeout?: number): Promise<void>` to `BrowserDriver` interface.
-- [ ] Implement `waitForStability` in `PuppeteerDriver`:
+- [x] Add `waitForStability(xpath: string, timeout?: number): Promise<void>` to `BrowserDriver` interface.
+- [x] Implement `waitForStability` in `PuppeteerDriver`:
   - Loop with short delay (e.g., 50ms).
   - Compare `getBoundingClientRect` positions.
   - Return when delta < threshold (e.g., 2px) for N consecutive checks.
-- [ ] Update `ClickAction`, `TypeAction`, `SelectAction` to call `waitForStability` before action.
-- [ ] Create `tests/integration/stability.test.ts` to simulate moving element.
+- [x] Update `ClickAction`, `TypeAction`, `SelectAction` to call `waitForStability` before action.
+- [x] Create `tests/integration/stability.test.ts` to simulate moving element.
 
 ### 2. Frame Support
 **Problem:** Elements inside `<iframe>` are invisible to `DOMBuilder` running in the main context.
 **Solution:** Iterate over all frames and build a composite DOM tree.
 
 **Implementation:**
-- [ ] Update `DOMElement` interface in `src/types/index.ts` to include `frameId` (string or number).
-- [ ] Update `SmartBrowser.buildDOMTree` in `src/adapters/smart-browser.ts`:
+- [x] Update `DOMElement` interface in `src/types/index.ts` to include `frameId` (string or number).
+- [x] Update `SmartBrowser.buildDOMTree` in `src/adapters/smart-browser.ts`:
   - Get all frames via `driver.getFrames()` (need to add this).
   - Iterate frames and inject `DOMBuilder` into each.
   - Collect elements and tag them with `frameId`.
   - Handle cross-origin frames by using `frame.evaluate()`.
-- [ ] Update `BrowserDriver` methods (`clickXPath`, `typeXPath`, etc.) to accept `frameId` or context.
-- [ ] Update `ActionExecutors` to pass `frameId` from `DOMElement` to driver.
-- [ ] Create `tests/integration/frames.test.ts` with an iframe fixture.
+- [x] Update `BrowserDriver` methods (`clickXPath`, `typeXPath`, etc.) to accept `frameId` or context.
+- [x] Update `ActionExecutors` to pass `frameId` from `DOMElement` to driver.
+- [x] Create `tests/integration/frames.test.ts` with an iframe fixture.
 
 ---
 

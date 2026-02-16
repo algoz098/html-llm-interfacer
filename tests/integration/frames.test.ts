@@ -76,4 +76,34 @@ describe('Frame Support', () => {
     const isClicked = results.some(r => r.result === 'true');
     expect(isClicked).toBe(true);
   });
+
+  test('should have correct global coordinates for elements inside iframe', async () => {
+    await browser.navigate(fixturePath);
+    await new Promise(r => setTimeout(r, 1000));
+
+    const tree = await browser.buildDOMTree();
+    const frameBtn = tree.elements.find(el => el.attributes?.id === 'frame-btn');
+
+    expect(frameBtn).toBeDefined();
+
+    // The iframe is after a button, so its Y position should be > 0
+    // And the button inside iframe should have Y > iframe Y
+    expect(frameBtn!.viewportY).toBeGreaterThan(20); // Rough check
+
+    // Attempt to click using coordinates (bypassing XPath)
+    // We simulate this by manually calling clickCoordinates on driver
+    // using the coordinates from the DOM tree
+    await driver.clickCoordinates(frameBtn!.viewportX, frameBtn!.viewportY);
+
+    // Verify click effect
+    const results = await driver.executeInAllFrames<string | null>(`
+        (function() {
+            const btn = document.getElementById('frame-btn');
+            return btn ? btn.getAttribute('data-clicked') : null;
+        })()
+    `);
+
+    const isClicked = results.some(r => r.result === 'true');
+    expect(isClicked).toBe(true);
+  });
 });
