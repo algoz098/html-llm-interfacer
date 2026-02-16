@@ -22,17 +22,20 @@ export class SelectAction {
 
     // Strategy 1: XPath
     let xpath = action.xpath;
+    let frameIndex: number | undefined;
 
-    if (!xpath && action.elementIndex !== undefined) {
+    if (action.elementIndex !== undefined) {
       const element = session.domTree.elements[action.elementIndex];
       if (element) {
-        xpath = element.xpath;
+        if (!xpath) xpath = element.xpath;
+        frameIndex = element.frameIndex;
       }
     }
 
     if (xpath) {
       try {
-        await driver.selectXPath(xpath, value);
+        await driver.waitForStability(xpath, undefined, frameIndex);
+        await driver.selectXPath(xpath, value, frameIndex);
         return {
           success: true,
           message: `Selected "${value}" via XPath`,

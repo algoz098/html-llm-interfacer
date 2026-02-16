@@ -20,6 +20,7 @@ export class ClickAction {
     // Priority: Explicit XPath in action > Element's XPath from session
     let xpath = action.xpath;
     let elementCoords: { x: number, y: number } | undefined;
+    let frameIndex: number | undefined;
 
     // Retrieve element info if index is present, regardless of xpath presence
     // This allows fallback to coordinates even if xpath was provided but failed
@@ -29,11 +30,13 @@ export class ClickAction {
         xpath = element.xpath;
       }
       elementCoords = { x: element.viewportX, y: element.viewportY };
+      frameIndex = element.frameIndex;
     }
 
     if (xpath) {
       try {
-        await driver.clickXPath(xpath);
+        await driver.waitForStability(xpath, undefined, frameIndex);
+        await driver.clickXPath(xpath, frameIndex);
         return {
           success: true,
           message: 'Clicked element via XPath',

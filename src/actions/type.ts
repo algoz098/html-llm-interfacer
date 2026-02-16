@@ -22,17 +22,20 @@ export class TypeAction {
 
     // Strategy 1: XPath
     let xpath = action.xpath;
+    let frameIndex: number | undefined;
 
-    if (!xpath && action.elementIndex !== undefined) {
+    if (action.elementIndex !== undefined) {
       const element = session.domTree.elements[action.elementIndex];
       if (element) {
-        xpath = element.xpath;
+        if (!xpath) xpath = element.xpath;
+        frameIndex = element.frameIndex;
       }
     }
 
     if (xpath) {
       try {
-        await driver.typeXPath(xpath, text);
+        await driver.waitForStability(xpath, undefined, frameIndex);
+        await driver.typeXPath(xpath, text, frameIndex);
         return {
           success: true,
           message: `Typed "${text}" into element via XPath`,

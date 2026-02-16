@@ -17,6 +17,7 @@ export interface DOMElement {
   viewportY: number;
   pageX: number;
   pageY: number;
+  frameIndex?: number; // Index of the frame in the page
 }
 
 /**
