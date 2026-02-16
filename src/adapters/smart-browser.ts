@@ -69,12 +69,51 @@ export class SmartBrowser {
     `;
 
     try {
-      // Evaluate the script in the browser context
-      const result = await this.driver.evaluate<DOMTreeState>(domBuilderScript);
+      // Execute in all frames
+      const results = await this.driver.executeInAllFrames<DOMTreeState>(domBuilderScript);
 
-      // Update session state
-      this.session.domTree = result;
-      this.session.domTree.timestamp = Date.now(); // Ensure local timestamp
+      // Merge results
+      // Find main frame (usually index 0, or the one with matching URL if we tracked it, but index 0 is safe bet for now)
+      // Puppeteer main frame is always index 0 in frames() array?
+      // Actually frames() returns all frames including main.
+      // We'll assume index 0 is main.
+      const mainFrameResult = results.find((r) => r.frameIndex === 0);
+
+      if (!mainFrameResult) {
+        // Fallback: use the first successful result if 0 failed or doesn't exist
+        if (results.length > 0) {
+           // use results[0]
+        } else {
+           throw new Error('No frames returned DOM tree');
+        }
+      }
+
+      const finalElements: any[] = [];
+      let globalIndex = 0;
+
+      // Sort results by frameIndex to be deterministic
+      results.sort((a, b) => a.frameIndex - b.frameIndex);
+
+      for (const res of results) {
+        const frameElements = res.result.elements;
+        const frameId = res.frameIndex;
+
+        frameElements.forEach((el) => {
+          // Update frame index
+          el.frameIndex = frameId;
+          // Re-index globally
+          el.index = globalIndex++;
+          finalElements.push(el);
+        });
+      }
+
+      // Construct final tree based on main frame metadata
+      this.session.domTree = {
+        url: mainFrameResult?.result.url || '',
+        title: mainFrameResult?.result.title || '',
+        elements: finalElements,
+        timestamp: Date.now(),
+      };
 
       return this.session.domTree;
     } catch (error: any) {

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Moving Element Test</title>
+    <style>
+        #moving-btn {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            width: 100px;
+            height: 50px;
+            background-color: blue;
+            color: white;
+            transition: all 0.2s linear;
+        }
+    </style>
+</head>
+<body>
+    <button id="moving-btn" onclick="this.setAttribute('data-clicked', 'true')">Click Me</button>
+    <div id="status"></div>
+
+    <script>
+        const btn = document.getElementById('moving-btn');
+        let x = 50;
+        let moving = true;
+
+        function move() {
+            if (!moving) return;
+            x += 10;
+            if (x > 200) x = 50;
+            btn.style.left = x + 'px';
+            setTimeout(move, 100);
+        }
+
+        // Start moving
+        move();
+
+        // Stop moving after 2 seconds to allow stability check to eventually pass
+        setTimeout(() => {
+            moving = false;
+            document.getElementById('status').textContent = 'Stopped';
+        }, 2000);
+    </script>
+</body>
+</html>

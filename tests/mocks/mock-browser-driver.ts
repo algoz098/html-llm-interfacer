@@ -30,6 +30,17 @@ export class MockBrowserDriver implements BrowserDriver {
     return func()(...args);
   }
 
+  async executeInAllFrames<T>(script: string): Promise<{ frameIndex: number; result: T }[]> {
+    // JSDOM mock only has one frame (main window)
+    const result = await this.evaluate<T>(script);
+    return [{ frameIndex: 0, result }];
+  }
+
+  async waitForStability(_xpath: string, _timeout?: number, _frameIndex?: number): Promise<void> {
+    // Mock always stable
+    return Promise.resolve();
+  }
+
   async click(selector: string): Promise<void> {
     const element = document.querySelector(selector) as HTMLElement;
     if (!element) {
@@ -38,7 +49,10 @@ export class MockBrowserDriver implements BrowserDriver {
     this.simulateClick(element);
   }
 
-  async clickXPath(xpath: string): Promise<void> {
+  async clickXPath(xpath: string, frameIndex?: number): Promise<void> {
+    if (frameIndex && frameIndex > 0) {
+        throw new Error("MockBrowserDriver does not support multiple frames");
+    }
     const result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
     const element = result.singleNodeValue as HTMLElement;
     if (!element) {
@@ -78,7 +92,10 @@ export class MockBrowserDriver implements BrowserDriver {
     this.simulateType(element, text);
   }
 
-  async typeXPath(xpath: string, text: string): Promise<void> {
+  async typeXPath(xpath: string, text: string, frameIndex?: number): Promise<void> {
+    if (frameIndex && frameIndex > 0) {
+        throw new Error("MockBrowserDriver does not support multiple frames");
+    }
     const result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
     const element = result.singleNodeValue as HTMLInputElement | HTMLTextAreaElement;
     if (!element) {
@@ -101,7 +118,10 @@ export class MockBrowserDriver implements BrowserDriver {
     this.simulateSelect(element, value);
   }
 
-  async selectXPath(xpath: string, value: string): Promise<void> {
+  async selectXPath(xpath: string, value: string, frameIndex?: number): Promise<void> {
+    if (frameIndex && frameIndex > 0) {
+        throw new Error("MockBrowserDriver does not support multiple frames");
+    }
     const result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
     const element = result.singleNodeValue as HTMLSelectElement;
     if (!element) {

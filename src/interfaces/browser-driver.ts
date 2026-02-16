@@ -33,6 +33,12 @@ export interface BrowserDriver {
   evaluate<T>(pageFunction: string | ((...args: any[]) => T | Promise<T>), ...args: any[]): Promise<T>;
 
   /**
+   * Execute a script in all frames and return results
+   * @param script Script to execute
+   */
+  executeInAllFrames<T>(script: string): Promise<{ frameIndex: number, result: T }[]>;
+
+  /**
    * Click an element by CSS selector
    */
   click(selector: string): Promise<void>;
@@ -40,7 +46,7 @@ export interface BrowserDriver {
   /**
    * Click an element by XPath
    */
-  clickXPath(xpath: string): Promise<void>;
+  clickXPath(xpath: string, frameIndex?: number): Promise<void>;
 
   /**
    * Click at specific coordinates
@@ -55,7 +61,7 @@ export interface BrowserDriver {
   /**
    * Type text into an element found by XPath
    */
-  typeXPath(xpath: string, text: string): Promise<void>;
+  typeXPath(xpath: string, text: string, frameIndex?: number): Promise<void>;
 
   /**
    * Select an option in a dropdown
@@ -65,11 +71,19 @@ export interface BrowserDriver {
   /**
    * Select an option in a dropdown found by XPath
    */
-  selectXPath(xpath: string, value: string): Promise<void>;
+  selectXPath(xpath: string, value: string, frameIndex?: number): Promise<void>;
 
   /**
    * Take a screenshot
    * @returns Buffer containing the screenshot
    */
   screenshot(): Promise<Buffer>;
+
+  /**
+   * Wait for an element to be stable (position/size not changing)
+   * @param xpath XPath selector for the element
+   * @param timeout Timeout in milliseconds
+   * @param frameIndex Index of the frame
+   */
+  waitForStability(xpath: string, timeout?: number, frameIndex?: number): Promise<void>;
 }
