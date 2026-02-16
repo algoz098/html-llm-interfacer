@@ -73,28 +73,28 @@ Ver: agents.md para código exemplo
 ## 📚 Documentação por Caso de Uso
 
 ### ❓ "Quero apenas aprender os padrões"
-1. Leia: [DOCS/research/SYNTHESIS.md](./DOCS/research/SYNTHESIS.md) (30 min)
+1. Leia: [DOCS/research/SYNTHESIS.md](./research/synthesis.md) (30 min)
 2. Depois: Framework específico que interessa
 
 ### ❓ "Quero começar a implementar"
 1. Leia: [agents.md](./agents.md) (20 min)
 2. Comece: Phase 1 (nanobrowser heuristic)
-3. Referência: [nanobrowser.md](./DOCS/research/nanobrowser.md)
+3. Referência: [nanobrowser.md](./research/nanobrowser.md)
 
 ### ❓ "Quero entender detalhes técnicos"
 | Tópico | Arquivo |
 |--------|---------|
-| Como encontrar elementos? | [nanobrowser.md](./DOCS/research/nanobrowser.md) |
-| Como clicar/digitar? | [browserable.md](./DOCS/research/browserable.md) |
-| Como gerenciar sessão? | [browsernode.md](./DOCS/research/browsernode.md) |
-| Como extrair conteúdo? | [readability.md](./DOCS/research/readability.md) |
-| Como estruturar ações? | [skyvern.md](./DOCS/research/skyvern.md) |
-| Como fazer deploy cloud? | [browserbase-mcp.md](./DOCS/research/browserbase-mcp.md) |
+| Como encontrar elementos? | [nanobrowser.md](./research/nanobrowser.md) |
+| Como clicar/digitar? | [browserable.md](./research/browserable.md) |
+| Como gerenciar sessão? | [browsernode.md](./research/browsernode.md) |
+| Como extrair conteúdo? | [readability.md](./research/readability.md) |
+| Como estruturar ações? | [skyvern.md](./research/skyvern.md) |
+| Como fazer deploy cloud? | [browserbase-mcp.md](./research/browserbase-mcp.md) |
 
 ### ❓ "Preciso fazer uma decisão"
-- Qual elemento detection? → [nanobrowser.md § Decision](./DOCS/research/nanobrowser.md#lessons-for-our-library)
-- Qual action fallback? → [browserable.md § Decision](./DOCS/research/browserable.md#pattern-summary-decision-tree)
-- Qual Session model? → [SYNTHESIS.md § Decision](./DOCS/research/SYNTHESIS.md#page-state-management)
+- Qual elemento detection? → [nanobrowser.md § Decision](./research/nanobrowser.md#lessons-for-our-library)
+- Qual action fallback? → [browserable.md § Decision](./research/browserable.md#pattern-summary-decision-tree)
+- Qual Session model? → [SYNTHESIS.md § Decision](./research/synthesis.md#page-state-management)
 
 ---
 
@@ -204,7 +204,7 @@ npm run dev
 │       → Checklist
 │
 └─ 4️⃣ Deep dive?
-   └─ [Qualquer .md](./DOCS/research/) (60+ min)
+   └─ [Qualquer .md](./research) (60+ min)
       → Detalhes técnicos
       → Pseudocode
       → Trade-offs
@@ -217,8 +217,8 @@ npm run dev
 | Atividade | Tempo | Referência |
 |-----------|-------|-----------|
 | Ler Quick Start | 5 min | Este arquivo |
-| Ler README | 5 min | [README.md](./README.md) |
-| Entender arquitetura | 30 min | [SYNTHESIS.md](./DOCS/research/SYNTHESIS.md) |
+| Ler README | 5 min | [README.md](../README.md) |
+| Entender arquitetura | 30 min | [SYNTHESIS.md](./research/synthesis.md) |
 | Planejar Phase 1 | 10 min | [agents.md](./agents.md) |
 | Implementar Phase 1 | 5-10 horas | Ver [agents.md Phase 1](./agents.md#-guia-de-implementação-por-fase) |
 | **Total para começar** | **1-2 horas** | + implementação |
@@ -245,13 +245,13 @@ npm run dev
 → Leia [agents.md § Passo 1-3](./agents.md#-guia-de-implementação-por-fase)
 
 ### "Qual padrão usar?"
-→ Ver [SYNTHESIS.md § Decision Trees](./DOCS/research/SYNTHESIS.md#recommended-architecture)
+→ Ver [SYNTHESIS.md § Decision Trees](./research/synthesis.md#recommended-architecture)
 
 ### "Tenho um problema"
 → Leia [agents.md § Troubleshooting](./agents.md#-troubleshooting)
 
 ### "Quero aprender mais"
-→ Acesse [DOCS/research/README.md](./DOCS/research/README.md)
+→ Acesse [DOCS/research/README.md](./research/readme.md)
 
 ---
 
@@ -264,19 +264,19 @@ npm run dev
 │         └─ Depois: README.md
 │
 ├─ 30 min: Entenda arquitetura
-│          └─ [SYNTHESIS.md](./DOCS/research/SYNTHESIS.md)
+│          └─ [SYNTHESIS.md](./research/synthesis.md)
 │
 ├─ 1-2 horas: Planeje implementação
 │             └─ [agents.md](./agents.md)
 │
 └─ 4-8 horas: Implemente Phase 1
-              └─ [agents.md § Phase 1](./agents.md) + [nanobrowser.md](./DOCS/research/nanobrowser.md)
+              └─ [agents.md § Phase 1](./agents.md) + [nanobrowser.md](./research/nanobrowser.md)
 ```
 
 ---
 
 **Você está em:** Quick Start Guide ← VOCÊ ESTÁ AQUI  
-**Próximo:** [README.md](./README.md) ou [agents.md](./agents.md)
+**Próximo:** [README.md](../README.md) ou [agents.md](./agents.md)
 
 ---
 
@@ -284,11 +284,11 @@ npm run dev
 
 | Nível | Arquivo | Use Quando |
 |-------|---------|-----------|
-| **Iniciante** | [Quick Start](./QUICK_START.md) | Agora! |
-| **Básico** | [README.md](./README.md) | Visão geral |
+| **Iniciante** | [Quick Start](./quick-start.md) | Agora! |
+| **Básico** | [README.md](../README.md) | Visão geral |
 | **Intermediário** | [agents.md](./agents.md) | Pronto para code |
-| **Avançado** | [SYNTHESIS.md](./DOCS/research/SYNTHESIS.md) | Detalhes |
-| **Expert** | [framework.md](./DOCS/research/) | Deep dive |
+| **Avançado** | [SYNTHESIS.md](./research/synthesis.md) | Detalhes |
+| **Expert** | [framework.md](./research) | Deep dive |
 
 ---
 

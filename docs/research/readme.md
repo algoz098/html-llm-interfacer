@@ -50,7 +50,7 @@ Coletar referencias de bibliotecas similares e padroes existentes.
 - [browsernode](./browsernode.md) — Interactive detection + frame navigation + state history
 - [skyvern-ai/skyvern](./skyvern.md) — Action taxonomy + semantic context + LLM-driven execution
 - [mozilla/readability](./readability.md) — Content extraction + boilerplate removal + scoring algorithm
-- [SYNTHESIS](./SYNTHESIS.md) — Cross-framework analysis + architecture recommendations
+- [SYNTHESIS](./synthesis.md) — Cross-framework analysis + architecture recommendations
 
 *Note: postlight/mercury-parser (404 error) - similar patterns to readability covered in readability.md*
 

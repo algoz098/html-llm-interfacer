@@ -17,9 +17,9 @@ Uma biblioteca TypeScript para **smart web automation** que combina:
 ## 🚀 Começar Rápido
 
 ### ⚡ Acesso Direto
-> **NOVO AQUI?** → [QUICK_START.md](./QUICK_START.md) (5 min)  
-> **DESENVOLVEDOR?** → [agents.md](./agents.md) (20 min)  
-> **ARQUITETO?** → [DOCS/research/SYNTHESIS.md](./DOCS/research/SYNTHESIS.md) (45 min)
+> **NOVO AQUI?** → [QUICK_START.md](./docs/quick-start.md) (5 min)
+> **DESENVOLVEDOR?** → [agents.md](./docs/agents.md) (20 min)
+> **ARQUITETO?** → [DOCS/research/SYNTHESIS.md](./docs/research/synthesis.md) (45 min)
 
 ### 1. Entender a Arquitetura
 ```
@@ -56,26 +56,26 @@ TBD - Estrutura src/ não criada ainda
 ## 📚 Documentação
 
 ### 🎓 Para Aprender Padrões
-- **[agents.md](./agents.md)** - Guia completo de implementação (5 fases)
-- **[DOCS/research/SYNTHESIS.md](./DOCS/research/SYNTHESIS.md)** - Análise cruzada + decisões arquiteturais
-- **[DOCS/research/README.md](./DOCS/research/README.md)** - Índice de pesquisa (13 frameworks)
+- **[agents.md](./docs/agents.md)** - Guia completo de implementação (5 fases)
+- **[DOCS/research/SYNTHESIS.md](./docs/research/synthesis.md)** - Análise cruzada + decisões arquiteturais
+- **[DOCS/research/README.md](./docs/research/readme.md)** - Índice de pesquisa (13 frameworks)
 
 ### 🔍 Para Detalhes Técnicos
-- [nanobrowser.md](./DOCS/research/nanobrowser.md) - Element detection (88% accuracy)
-- [skyvern.md](./DOCS/research/skyvern.md) - Action taxonomy + LLM
-- [browserable.md](./DOCS/research/browserable.md) - Multi-strategy + chunking (20x tokens!)
-- [browsernode.md](./DOCS/research/browsernode.md) - Session + frames
-- [readability.md](./DOCS/research/readability.md) - Content extraction
-- [browserbase-mcp.md](./DOCS/research/browserbase-mcp.md) - Cloud deployment
+- [nanobrowser.md](./docs/research/nanobrowser.md) - Element detection (88% accuracy)
+- [skyvern.md](./docs/research/skyvern.md) - Action taxonomy + LLM
+- [browserable.md](./docs/research/browserable.md) - Multi-strategy + chunking (20x tokens!)
+- [browsernode.md](./docs/research/browsernode.md) - Session + frames
+- [readability.md](./docs/research/readability.md) - Content extraction
+- [browserbase-mcp.md](./docs/research/browserbase-mcp.md) - Cloud deployment
 
 ### 📋 Documentação de Design
-- [DOCS/README.md](./DOCS/README.md) - Índice de documentação
-- [DOCS/architecture.md](./DOCS/architecture.md) - Decisões arquiteturais
-- [DOCS/objectives.md](./DOCS/objectives.md) - Objetivos do projeto
-- [DOCS/requirements.md](./DOCS/requirements.md) - Requisitos e casos de uso
-- [DOCS/taxonomy.md](./DOCS/taxonomy.md) - Taxonomia de elementos
-- [DOCS/ids.md](./DOCS/ids.md) - Estratégia de identificadores
-- [DOCS/api.md](./DOCS/api.md) - API pública
+- [DOCS/README.md](./docs/readme.md) - Índice de documentação
+- [DOCS/architecture.md](./docs/architecture.md) - Decisões arquiteturais
+- [DOCS/objectives.md](./docs/objectives.md) - Objetivos do projeto
+- [DOCS/requirements.md](./docs/requirements.md) - Requisitos e casos de uso
+- [DOCS/taxonomy.md](./docs/taxonomy.md) - Taxonomia de elementos
+- [DOCS/ids.md](./docs/ids.md) - Estratégia de identificadores
+- [DOCS/api.md](./docs/api.md) - API pública
 
 ---
 
@@ -83,18 +83,18 @@ TBD - Estrutura src/ não criada ainda
 
 | # | Framework | Especialidade | Arquivo |
 |---|-----------|--|----------|
-| 1 | browser-use | DOM indexing | [browser-use.md](./DOCS/research/browser-use.md) |
-| 2 | BrowserGym | Persistent BID | [browsergym.md](./DOCS/research/browsergym.md) |
-| 3 | HyperAgent | A11y tree + LLM | [hyperagent.md](./DOCS/research/hyperagent.md) |
-| 4 | LaVague | World Model | [lavague.md](./DOCS/research/lavague.md) |
-| 5 | steel-browser | REST API | [steel-browser.md](./DOCS/research/steel-browser.md) |
-| 6 | axe-core | ARIA taxonomy | [axe-core.md](./DOCS/research/axe-core.md) |
-| 7 | **nanobrowser** | **Interactivity heuristics** | **[nanobrowser.md](./DOCS/research/nanobrowser.md)** |
-| 8 | **browserbase/mcp** | **Cloud + MCP** | **[browserbase-mcp.md](./DOCS/research/browserbase-mcp.md)** |
-| 9 | **browserable** | **Chunking + vision** | **[browserable.md](./DOCS/research/browserable.md)** |
-| 10 | **browsernode** | **Session + frames** | **[browsernode.md](./DOCS/research/browsernode.md)** |
-| 11 | **skyvern-ai** | **Action taxonomy** | **[skyvern.md](./DOCS/research/skyvern.md)** |
-| 12 | **readability** | **Content extraction** | **[readability.md](./DOCS/research/readability.md)** |
+| 1 | browser-use | DOM indexing | [browser-use.md](./docs/research/browser-use.md) |
+| 2 | BrowserGym | Persistent BID | [browsergym.md](./docs/research/browsergym.md) |
+| 3 | HyperAgent | A11y tree + LLM | [hyperagent.md](./docs/research/hyperagent.md) |
+| 4 | LaVague | World Model | [lavague.md](./docs/research/lavague.md) |
+| 5 | steel-browser | REST API | [steel-browser.md](./docs/research/steel-browser.md) |
+| 6 | axe-core | ARIA taxonomy | [axe-core.md](./docs/research/axe-core.md) |
+| 7 | **nanobrowser** | **Interactivity heuristics** | **[nanobrowser.md](./docs/research/nanobrowser.md)** |
+| 8 | **browserbase/mcp** | **Cloud + MCP** | **[browserbase-mcp.md](./docs/research/browserbase-mcp.md)** |
+| 9 | **browserable** | **Chunking + vision** | **[browserable.md](./docs/research/browserable.md)** |
+| 10 | **browsernode** | **Session + frames** | **[browsernode.md](./docs/research/browsernode.md)** |
+| 11 | **skyvern-ai** | **Action taxonomy** | **[skyvern.md](./docs/research/skyvern.md)** |
+| 12 | **readability** | **Content extraction** | **[readability.md](./docs/research/readability.md)** |
 | 13 | mercury-parser | *(patterns in readability)* | *(covered)* |
 
 ✅ **Status: Pesquisa Completa (13/13)**
@@ -196,8 +196,8 @@ Recomendação: Usar chunking para > 3000 elements
 
 ## ✅ Checklist: Pronto para Começar?
 
-- [ ] Li [agents.md](./agents.md) completamente
-- [ ] Li [DOCS/research/SYNTHESIS.md](./DOCS/research/SYNTHESIS.md)
+- [ ] Li [agents.md](./docs/agents.md) completamente
+- [ ] Li [DOCS/research/SYNTHESIS.md](./docs/research/synthesis.md)
 - [ ] Escolhi minha Fase de implementação
 - [ ] Entendi padrões de fallback
 - [ ] Planejei testes em 3 sites de tamanho diferente
@@ -218,21 +218,21 @@ Recomendação: Usar chunking para > 3000 elements
 6. **Action taxonomy** (skyvern) - type-safe execution
 
 ### Documentos Essenciais
-- 📖 Começar: [agents.md](./agents.md)
-- 🏗️ Arquitetura: [DOCS/research/SYNTHESIS.md](./DOCS/research/SYNTHESIS.md)
-- 📋 Índice: [DOCS/research/README.md](./DOCS/research/README.md)
+- 📖 Começar: [agents.md](./docs/agents.md)
+- 🏗️ Arquitetura: [DOCS/research/SYNTHESIS.md](./docs/research/synthesis.md)
+- 📋 Índice: [DOCS/research/README.md](./docs/research/readme.md)
 
 ### Decision Matrices
-- ✅ [SYNTHESIS.md § Architecture Decision Matrix](./DOCS/research/SYNTHESIS.md#architecture-decision-matrix)
-- ✅ [SYNTHESIS.md § Comparative Strengths](./DOCS/research/SYNTHESIS.md#comparative-strengths--weaknesses)
-- ✅ [agents.md § Decision Tree](./agents.md#-matriz-de-decisão-quando-usar-o-quê)
+- ✅ [SYNTHESIS.md § Architecture Decision Matrix](./docs/research/synthesis.md#architecture-decision-matrix)
+- ✅ [SYNTHESIS.md § Comparative Strengths](./docs/research/synthesis.md#comparative-strengths--weaknesses)
+- ✅ [agents.md § Decision Tree](./docs/agents.md#-matriz-de-decisão-quando-usar-o-quê)
 
 ---
 
 ## 📞 Support
 
-- 📚 **Documentação:** [DOCS/README.md](./DOCS/README.md)
-- 🤔 **Fature Requests:** [agents.md § Troubleshooting](./agents.md#-troubleshooting)
+- 📚 **Documentação:** [DOCS/README.md](./docs/readme.md)
+- 🤔 **Fature Requests:** [agents.md § Troubleshooting](./docs/agents.md#-troubleshooting)
 - 🐛 **Bugs:** Ver problemas conhecidos na documentação específica
 
 ---
