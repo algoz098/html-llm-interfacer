@@ -17,6 +17,7 @@ export interface DOMElement {
   viewportY: number;
   pageX: number;
   pageY: number;
+  frameId?: string; // ID of the frame this element belongs to
 }
 
 /**
@@ -65,6 +66,7 @@ export interface Action {
   params?: Record<string, unknown>;
   xpath?: string;
   text?: string;
+  frameId?: string; // Target frame for the action
 }
 
 /**
