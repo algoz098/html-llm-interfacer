@@ -1,4 +1,8 @@
 /**
+ * @jest-environment jsdom
+ */
+
+/**
  * Tests for DOMBuilder
  *
  * Phase 1 Focus: Multi-stage interactivity heuristics

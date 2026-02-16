@@ -1,31 +1,66 @@
 /**
- * TypeAction - Execute text input actions on elements
- * Supports input, textarea, and contenteditable elements
+ * TypeAction - Execute type actions on elements
+ * Implements strategy:
+ * 1. XPath selector
+ * 2. CSS Selector
  */
 
-import { Action, ActionResult } from '../types';
+import { Action, ActionResult, SessionState } from '../types';
+import { BrowserDriver } from '../interfaces/browser-driver';
 
 export class TypeAction {
   /**
-   * Execute type action (TBD - implementation)
+   * Execute type action
    */
-  async execute(_action: Action): Promise<ActionResult> {
-    return {
-      success: false,
-      message: 'TypeAction.execute() - TBD',
-      error: 'Not implemented yet',
-      confidence: 0,
-    };
-  }
+  async execute(driver: BrowserDriver, action: Action, session: SessionState): Promise<ActionResult> {
+    const text = action.text || (action.params?.text as string);
+    if (!text) {
+        return { success: false, message: 'Missing text to type' };
+    }
 
-  /**
-   * Execute with fallback chain (TBD - implementation)
-   */
-  async executeWithFallback(_action: Action): Promise<ActionResult> {
+    const errors: string[] = [];
+
+    // Strategy 1: XPath
+    let xpath = action.xpath;
+
+    if (!xpath && action.elementIndex !== undefined) {
+      const element = session.domTree.elements[action.elementIndex];
+      if (element) {
+        xpath = element.xpath;
+      }
+    }
+
+    if (xpath) {
+      try {
+        await driver.typeXPath(xpath, text);
+        return {
+          success: true,
+          message: `Typed "${text}" into element via XPath`,
+          confidence: 1.0,
+        };
+      } catch (error: any) {
+        errors.push(`XPath failed: ${error.message}`);
+      }
+    }
+
+    // Strategy 2: CSS Selector (if provided)
+    if (action.params?.selector && typeof action.params.selector === 'string') {
+        try {
+            await driver.type(action.params.selector, text);
+            return {
+                success: true,
+                message: `Typed "${text}" via CSS Selector`,
+                confidence: 0.9
+            };
+        } catch (error: any) {
+            errors.push(`Selector failed: ${error.message}`);
+        }
+    }
+
     return {
       success: false,
-      message: 'TypeAction.executeWithFallback() - TBD',
-      error: 'Not implemented yet',
+      message: 'All type strategies failed',
+      error: errors.join('; '),
       confidence: 0,
     };
   }

@@ -3,7 +3,12 @@
  * Coordina detecção de elementos, execução de ações e gerenciamento de sessão
  */
 
-import { SmartBrowserConfig, SessionState, Action, ActionResult, DOMTreeState } from '../types';
+import { SmartBrowserConfig, SessionState, Action, ActionResult, DOMTreeState, ActionType } from '../types';
+import { BrowserDriver } from '../interfaces/browser-driver';
+import { DOMBuilder } from '../core/dom-builder';
+import { ClickAction } from '../actions/click';
+import { TypeAction } from '../actions/type';
+import { SelectAction } from '../actions/select';
 
 /**
  * SmartBrowser: Multi-layer web automation engine
@@ -16,15 +21,22 @@ import { SmartBrowserConfig, SessionState, Action, ActionResult, DOMTreeState } 
  * 5. LLM Integration (skyvern action taxonomy)
  */
 export class SmartBrowser {
-  private readonly config: SmartBrowserConfig;
-  private session?: SessionState;
+  private driver: BrowserDriver;
+  private config: SmartBrowserConfig;
+  private session: SessionState;
 
-  constructor(_config: SmartBrowserConfig = {}) {
-    this.config = {
-      headless: _config.headless ?? true,
-      timeout: _config.timeout ?? 30000,
-      viewportWidth: _config.viewportWidth ?? 1280,
-      viewportHeight: _config.viewportHeight ?? 720,
+  constructor(driver: BrowserDriver, config: SmartBrowserConfig = {}) {
+    this.driver = driver;
+    this.config = config;
+    this.session = {
+      sessionId: Math.random().toString(36).substring(2, 15),
+      domTree: {
+        url: '',
+        title: '',
+        elements: [],
+        timestamp: 0,
+      },
+      history: [],
     };
   }
 
@@ -39,8 +51,7 @@ export class SmartBrowser {
    * Initialize the browser and create a session
    */
   async initialize(): Promise<void> {
-    // TBD: Phase 1 implementation
-    console.warn('SmartBrowser.initialize() - TBD (Phase 1)');
+    await this.driver.initialize();
   }
 
   /**
@@ -48,25 +59,87 @@ export class SmartBrowser {
    * Phase 1: Multi-stage interactivity heuristic
    */
   async buildDOMTree(): Promise<DOMTreeState> {
-    // TBD: Phase 1 implementation
-    throw new Error('SmartBrowser.buildDOMTree() - TBD (Phase 1)');
+    // Inject DOMBuilder logic into the browser
+    /* eslint-disable @typescript-eslint/ban-types */
+    const domBuilderScript = `
+      (async () => {
+        ${DOMBuilder.toString()}
+        return new DOMBuilder().buildDOMTree(document);
+      })()
+    `;
+
+    try {
+      // Evaluate the script in the browser context
+      const result = await this.driver.evaluate<DOMTreeState>(domBuilderScript);
+
+      // Update session state
+      this.session.domTree = result;
+      this.session.domTree.timestamp = Date.now(); // Ensure local timestamp
+
+      return this.session.domTree;
+    } catch (error: any) {
+      console.error('Failed to build DOM tree:', error);
+      throw new Error(`DOM Build failed: ${error.message}`);
+    }
   }
 
   /**
    * Execute an action on an element
    * Phase 1: XPath + coordinate fallback
    */
-  async executeAction(_action: Action): Promise<ActionResult> {
-    // TBD: Phase 1 implementation
-    throw new Error('SmartBrowser.executeAction() - TBD (Phase 1)');
+  async executeAction(action: Action): Promise<ActionResult> {
+    try {
+      // 1. Validate action
+      if (!action.actionType) {
+        return { success: false, message: 'Missing actionType' };
+      }
+
+      // 2. Map high-level action to driver call
+      switch (action.actionType) {
+        case ActionType.Navigate:
+            if (action.params?.url && typeof action.params.url === 'string') {
+                await this.navigate(action.params.url);
+                return { success: true, message: `Navigated to ${action.params.url}` };
+            }
+            return { success: false, message: 'URL required for navigation' };
+
+        case ActionType.Click:
+             return await new ClickAction().execute(this.driver, action, this.session);
+
+        case ActionType.Type:
+             return await new TypeAction().execute(this.driver, action, this.session);
+
+        case ActionType.Select:
+             return await new SelectAction().execute(this.driver, action, this.session);
+      }
+
+      // 3. Update session history
+      this.session.history.push({
+        action: action.actionType,
+        timestamp: Date.now(),
+      });
+
+      return {
+        success: false,
+        message: `Action ${action.actionType} not fully implemented yet`,
+      };
+
+    } catch (error: any) {
+      return {
+        success: false,
+        message: `Execution failed: ${error.message}`,
+        error: error.message,
+      };
+    }
   }
 
   /**
    * Navigate to a URL
    */
-  async navigate(_url: string): Promise<void> {
-    // TBD: Phase 1 implementation
-    throw new Error('SmartBrowser.navigate() - TBD (Phase 1)');
+  async navigate(url: string): Promise<void> {
+    await this.driver.navigate(url);
+    // Update session URL immediately
+    this.session.domTree.url = url;
   }
 
   /**
@@ -80,7 +153,6 @@ export class SmartBrowser {
    * Close the browser and cleanup resources
    */
   async close(): Promise<void> {
-    // TBD: Phase 1 implementation
-    console.warn('SmartBrowser.close() - TBD (Phase 1)');
+    await this.driver.close();
   }
 }
